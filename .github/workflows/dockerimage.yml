@@ -30,4 +30,3 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           platforms: linux/amd64
           # tags: latest,${{ steps.package-version.outputs.current-version }}
-
