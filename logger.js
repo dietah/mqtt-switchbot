@@ -15,7 +15,7 @@ log4js.configure({
 	}
 });
 
-const logger = log4js.getLogger('switch');
+const logger = log4js.getLogger('mqtt-switchbot');
 
 // Log4js Log Levels
 // OFF
