@@ -1,0 +1,38 @@
+{
+  "name": "mqtt-switchbot",
+  "version": "1.0.0",
+  "description": "Control a SwitchBot switch via mqtt messages",
+  "main": "index.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.mjs",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dietah/mqtt-switchbot.git"
+  },
+  "keywords": [
+    "mqtt",
+    "switchbot"
+  ],
+  "author": "Dieter Verschueren",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/dietah/mqtt-switchbot/issues"
+  },
+  "homepage": "https://github.com/dietah/mqtt-switchbot#readme",
+  "dependencies": {
+    "@abandonware/noble": "^1.9.2-10",
+    "envalid": "^6.0.1",
+    "log4js": "^6.3.0",
+    "moment": "^2.29.1",
+    "mqtt": "^4.2.6",
+    "node-switchbot": "^1.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.2"
+  }
+}

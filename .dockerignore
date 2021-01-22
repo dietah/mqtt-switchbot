@@ -1,0 +1,13 @@
+.env
+.eslintrc.js
+.git
+.gitignore
+.vscode
+docker-compose*
+Dockerfile*
+LICENSE
+logs
+Makefile
+node_modules
+npm-debug.log
+README.md

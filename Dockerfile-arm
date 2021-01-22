@@ -1,0 +1,32 @@
+FROM node:buster-slim
+EXPOSE 3000
+
+ENV BLUEZ_VERSION 5.54
+
+WORKDIR /usr/src/app
+RUN apt-get update && apt-get -y install build-essential systemd wget g++ make python bluetooth libbluetooth-dev \
+libusb-dev libdbus-1-dev libglib2.0-dev libudev-dev libical-dev libreadline-dev
+
+RUN wget -P /tmp/ https://www.kernel.org/pub/linux/bluetooth/bluez-${BLUEZ_VERSION}.tar.gz \
+ && tar xf /tmp/bluez-${BLUEZ_VERSION}.tar.gz -C /tmp \
+#compile bluez
+ && cd /tmp/bluez-${BLUEZ_VERSION} \
+ && ./configure --prefix=/usr \
+    --mandir=/usr/share/man \
+    --sysconfdir=/etc \
+    --localstatedir=/var \
+    --enable-library \
+    --enable-experimental \
+    --enable-maintainer-mode \
+    --enable-deprecated \
+ && make \
+#install bluez tools
+ && make install
+
+COPY package*.json ./
+RUN npm install
+
+COPY . /usr/src/app
+ENV NODE_ENV production
+
+CMD [ "npm", "start" ]
