@@ -1,0 +1,32 @@
+name: 'Build'
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "*.js"
+      - "package*.json"
+      - "Dockerfile"
+      - ".github/workflows/dockerimage.yml"
+  workflow_dispatch:
+
+jobs:
+  dockerhub:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set vars
+        id: vars
+        run: if [ "${GITHUB_REF#refs/*/}" == "master" ]; then echo ::set-output name=branch::latest; else echo ::set-output name=branch::${GITHUB_REF#refs/*/}; fi
+      - name: Get Version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@master
+      - name: Build & Publish to Registry
+        uses: dietah/action-docker-publish-changed@master
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          platforms: linux/amd64
+          # tags: latest,${{ steps.package-version.outputs.current-version }}
