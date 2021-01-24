@@ -30,7 +30,6 @@ const logger = log4js.getLogger('mqtt-switchbot');
 // If you for example set the logging level to WARN all warnings, errors and fatals are logged
 
 module.exports = {
-	logRequest,
 	trace,
 	info,
 	debug,
@@ -38,17 +37,6 @@ module.exports = {
 	error,
 	line
 };
-
-function logRequest(request, entity) {
-	request = request.split('.');
-
-	// const api = request[0];
-	const model = request[1];
-	const method = request[2];
-
-	// logger.debug('%s.%s - received %s%s', api, model, method, (entity ? ` for ${entity}` : ''));
-	logger.debug(`received ${method.toUpperCase()} /${model} ${entity ? `for ${entity}` : ''}`);
-}
 
 function trace(...args) {
 	run(logger.trace, parseArgs(args));

@@ -67,7 +67,7 @@ async function workBot(address, action) {
 
 		// In some cases the switchbot lib returned
 		// "Error: Failed to discover services and characteristics: DISCONNECTED" and crashed
-		// In this case we keep retrying untill successful
+		// In this case we keep retrying until successful
 		let keepTrying;
 		let attempts = 1;
 		do {
