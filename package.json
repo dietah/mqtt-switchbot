@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/dietah/mqtt-switchbot#readme",
   "dependencies": {
-    "@abandonware/noble": "^1.9.2-10",
+    "@abandonware/noble": "^1.9.2-15",
     "envalid": "^6.0.1",
     "log4js": "^6.3.0",
     "moment": "^2.29.1",
