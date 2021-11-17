@@ -98,6 +98,11 @@ async function workBot(address, action) {
 				keepTrying = true;
 				attempts++;
 				logger.warn('switchbot-lib internal error, retrying');
+
+				if (attempts > config.RETRY_LIMIT) {
+					keepTrying = false;
+					logger.warn(`switchbot ${address} probably has a low battery and could not be reached`);
+				}
 			}
 		} while (keepTrying);
 	} else {

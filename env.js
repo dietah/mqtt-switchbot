@@ -6,6 +6,7 @@ module.exports = envalid.cleanEnv(process.env, {
 
 	SCAN_DURATION:	envalid.num({ default: 5000, desc: 'Duration for discovery process (ms)' }),
 	DEVICE_LIST:	envalid.str({ default: undefined, desc: 'Comma separated list of MAC addresses' }),
+	RETRY_LIMIT:	envalid.num({ default: 5, desc: 'Command retry limit before a warning is logged'}),
 
 	MQTT_HOST:		envalid.host({ desc: 'The MQTT broker host address' }),
 	MQTT_PORT:		envalid.port({ default: 1883, desc: 'The MQTT broker port' }),

@@ -28,7 +28,7 @@
     "log4js": "^6.3.0",
     "moment": "^2.29.1",
     "mqtt": "^4.2.6",
-    "node-switchbot": "^1.0.0"
+    "node-switchbot": "^1.1.2"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
