@@ -1,6 +1,6 @@
 {
   "name": "mqtt-switchbot",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Control a SwitchBot switch via mqtt messages",
   "main": "index.mjs",
   "scripts": {
