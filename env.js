@@ -5,7 +5,7 @@ module.exports = envalid.cleanEnv(process.env, {
 	LOG_LEVEL: 		envalid.str({ choices: ['OFF', 'FATAL', 'ERROR', 'WARN', 'INFO', 'DEBUG', 'TRACE', 'ALL'], default: 'INFO', devDefault: 'DEBUG' }),
 
 	SCAN_DURATION:	envalid.num({ default: 5000, desc: 'Duration for discovery process (ms)' }),
-	DEVICE_LIST:	envalid.str({ default: undefined, desc: 'Comma separated list of MAC addresses' }),
+	DEVICE_LIST:	envalid.str({ default: undefined, desc: 'Comma separated list of MAC addresses, a logical name can be added with a `|` symbol' }),
 	RETRY_LIMIT:	envalid.num({ default: 5, desc: 'Command retry limit before a warning is logged'}),
 
 	MQTT_HOST:		envalid.host({ desc: 'The MQTT broker host address' }),

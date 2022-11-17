@@ -10,12 +10,13 @@ logger.info('environment variables:\n', consoleConfig);
 const switchbot = new Switchbot();
 const mqttClient = mqtt.connect({ port: config.MQTT_PORT, host: config.MQTT_HOST, username: config.MQTT_USERNAME, password: config.MQTT_PASSWORD });
 
-(async () => {
-	let devices = config.DEVICE_LIST ? config.DEVICE_LIST.toLowerCase().split(',') : [];
+let devices = config.DEVICE_LIST ? config.DEVICE_LIST.split(',').map(device => device.split('|')[0]) : [];
+let deviceNames = {};
 
+(async () => {
 	// Use auto scan when no device list was provided
 	if (!config.DEVICE_LIST) {
-		logger.info(`started scanning`);
+		logger.info('started scanning');
 		const bots = await switchbot.discover({ model: 'H', duration: config.SCAN_DURATION });
 		logger.info(`found ${bots.length} bot(s)`);
 
@@ -29,9 +30,14 @@ const mqttClient = mqtt.connect({ port: config.MQTT_PORT, host: config.MQTT_HOST
 			logger.info('could not find any bots, shutting down');
 			process.exit(0);
 		}
+
+		deviceNames = devices.reduce((a, v) => ({ ...a, [v]: v }), {});
+	} else {
+		logger.info('DEVICE_LIST found, skipping startup scan');
+		deviceNames = config.DEVICE_LIST.split(',').reduce((a, v) => ({ ...a, [v.split('|')[0]]: v.split('|')[1] || v.split('|')[0] }), {});
 	}
 
-	const deviceTopics = devices.map(device => `${config.MQTT_TOPIC}/switch/${device}/set`);
+	const deviceTopics = devices.map(device => `${config.MQTT_TOPIC}/switch/${deviceNames[device]}/set`);
 	mqttClient.subscribe(deviceTopics, (error, grants) => {
 		grants.forEach(grant => logger.debug(`mqtt client subscribed to '${grant.topic}'`));
 	});
@@ -40,8 +46,9 @@ const mqttClient = mqtt.connect({ port: config.MQTT_PORT, host: config.MQTT_HOST
 		logger.debug(`mqtt message received on ${topic} ${message.toString()}`);
 
 		if (topic.endsWith('set') && message.length !== 0) {
-			const address = topic.split('/')[2];
+			const deviceTopic = topic.split('/')[2];
 			const parsedMessage = message.toString().toLowerCase();
+			const address = Object.keys(deviceNames).find(key => deviceNames[key] === deviceTopic);
 			workBot(address, parsedMessage);
 			reportBotStatus(address);
 		}
@@ -63,7 +70,7 @@ async function workBot(address, action) {
 	}
 
 	if (bot) {
-		logger.info(`executing ${action} for ${address}`);
+		logger.info(`executing ${action} for ${deviceNames[address] !== address ? address + ' - ' + deviceNames[address] : address}`);
 
 		// In some cases the switchbot lib returned
 		// "Error: Failed to discover services and characteristics: DISCONNECTED" and crashed
@@ -101,7 +108,7 @@ async function workBot(address, action) {
 
 				if (attempts > config.RETRY_LIMIT) {
 					keepTrying = false;
-					logger.warn(`switchbot ${address} probably has a low battery and could not be reached`);
+					logger.warn(`switchbot ${deviceNames[address] !== address ? address + ' - ' + deviceNames[address] : address} probably has a low battery and could not be reached`);
 				}
 			}
 		} while (keepTrying);
@@ -114,8 +121,8 @@ async function reportBotStatus(address) {
 	await switchbot.startScan({ id: address });
 
 	switchbot.onadvertisement = (ad) => {
-		mqttClient.publish(`${config.MQTT_TOPIC}/switch/${address}/battery`, `${ad.serviceData.battery}`);
-		mqttClient.publish(`${config.MQTT_TOPIC}/switch/${address}/linkquality`, `${ad.rssi}`);
+		mqttClient.publish(`${config.MQTT_TOPIC}/switch/${deviceNames[address]}/battery`, `${ad.serviceData.battery}`);
+		mqttClient.publish(`${config.MQTT_TOPIC}/switch/${deviceNames[address]}/linkquality`, `${ad.rssi}`);
 	};
 
 	await switchbot.wait(10 * 1000);

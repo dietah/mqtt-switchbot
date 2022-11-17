@@ -52,7 +52,7 @@ Variable | Type | Default | Required | Description |
 -------- | ---- | ------- | -------- | ----------- |
 LOG_LEVEL | String | DEBUG | x | log4js debug level, choices are: OFF, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, ALL, but I reccomend keeping it on DEBUG
 SCAN_DURATION | Number | 5 * 1000 | x | Duration for discovery process (ms)
-DEVICE_LIST | String |  |  | Comma delimited string of Bot MAC addresses
+DEVICE_LIST | String |  |  | Comma delimited string of Bot MAC addresses, a optional logical name can be added with a pipe '\|' symbol, eg: "f6:4e:18:be:8f:37\|switch_kitchen,e3:82:be:9c:a4:69\|switch_table"
 RETRY_LIMIT | Number | 5 |  | Command retry limit before a warning is logged
 MQTT_HOST | String |  | x | The host address of the MQTT broker
 MQTT_PORT | Number | 1883 | x | The MQTT broker port
