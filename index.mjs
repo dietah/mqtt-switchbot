@@ -10,7 +10,7 @@ logger.info('environment variables:\n', consoleConfig);
 const switchbot = new Switchbot();
 const mqttClient = mqtt.connect({ port: config.MQTT_PORT, host: config.MQTT_HOST, username: config.MQTT_USERNAME, password: config.MQTT_PASSWORD });
 
-let devices = config.DEVICE_LIST ? config.DEVICE_LIST.split(',').map(device => device.split('|')[0]) : [];
+let devices = config.DEVICE_LIST ? config.DEVICE_LIST.split(',').map(device => device.trim().split('|')[0]) : [];
 let deviceNames = {};
 
 (async () => {
@@ -34,7 +34,7 @@ let deviceNames = {};
 		deviceNames = devices.reduce((a, v) => ({ ...a, [v]: v }), {});
 	} else {
 		logger.info('DEVICE_LIST found, skipping startup scan');
-		deviceNames = config.DEVICE_LIST.split(',').reduce((a, v) => ({ ...a, [v.split('|')[0]]: v.split('|')[1] || v.split('|')[0] }), {});
+		deviceNames = config.DEVICE_LIST.split(',').reduce((a, v) => ({ ...a, [v.trim().split('|')[0]]: v.trim().split('|')[1] || v.trim().split('|')[0] }), {});
 	}
 
 	const deviceTopics = devices.map(device => `${config.MQTT_TOPIC}/switch/${deviceNames[device]}/set`);
