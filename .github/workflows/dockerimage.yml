@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - "*.js"
+      - "*.mjs"
       - "package*.json"
       - "Dockerfile"
       - ".github/workflows/dockerimage.yml"
