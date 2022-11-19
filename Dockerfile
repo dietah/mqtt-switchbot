@@ -1,4 +1,4 @@
-FROM node:buster-slim
+FROM node:14-buster-slim
 EXPOSE 3000
 
 WORKDIR /usr/src/app
